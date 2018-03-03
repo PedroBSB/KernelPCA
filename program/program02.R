@@ -14,6 +14,7 @@ library(googlesheets)
 library(gsheet)
 library(corrplot)
 library(xtable)
+library(tidyverse)
 
 nasdaq <- data.table(read_csv2("data/sp.csv",
                                skip = 1))
@@ -77,15 +78,20 @@ nasdaq <- spread(nasdaq %>% select(-m,-v),"var","value")
 
 cor0 <- cor(nasdaq[,-1])
 eigen0 <- eigen(cor0)
-plot(eigen0$values,type="l",xlim = c(0,25),col=1)
+
+pdf(file.path("eigen.pdf"),height=8,width = 12)
+
+
+plot(eigen0$values,type="l",xlim = c(0,25),col=1,lwd = 2,xlab = "Eigenvalue Index",ylab="Eigenvalue")
 abline(h=lamda_max,col=2,lty=3)
 
 g1 <- eigen0$values[eigen0$values>=lamda_max]
 g2 <- eigen0$values[eigen0$values<lamda_max]
 eigen1<- diag(c(g1,rep(mean(g2),length(g2))))
 cor1 <- eigen0$vectors %*% eigen1 %*% t(eigen0$vectors)
-points(c(g1,rep(mean(g2),length(g2))),col=4,type="l")
+points(c(g1,rep(mean(g2),length(g2))),col=4,type="l",lwd = 2)
 
 
 
+dev.off()
 
