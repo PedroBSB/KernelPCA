@@ -50,7 +50,7 @@ nasdaq <- nasdaq[,`:=`(year = gsub("\\d{2}.\\d{2}.(\\d{4})","\\1",X1),
                    day = gsub("(\\d{2}).\\d{2}.\\d{4}","\\1",X1))]
 
 nasdaq <- nasdaq[,last_day := max(day), by = .(year,month)]
-nasdaq <- nasdaq[(day == last_day),]
+# nasdaq <- nasdaq[(day == last_day),]
 nasdaq <- nasdaq[,DT:=as.Date(paste0(day,"/",month,"/",year),format ="%d/%m/%Y")]
 nasdaq <- nasdaq[order(DT)]
 
